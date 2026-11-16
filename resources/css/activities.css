@@ -1,0 +1,207 @@
+/* Estilos adicionales para las actividades */
+
+/* Animaciones para las tarjetas */
+.activity-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.activity-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Gradientes personalizados para categorías */
+.category-educacion {
+    background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+}
+
+.category-medio_ambiente {
+    background: linear-gradient(135deg, #10B981 0%, #047857 100%);
+}
+
+.category-salud {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+}
+
+.category-social {
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+}
+
+.category-comunitario {
+    background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+}
+
+/* Efectos de hover para botones */
+.btn-primary {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Animación para el indicador de carga */
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Estilos para las barras de progreso */
+.progress-bar {
+    transition: width 0.6s ease-in-out;
+}
+
+/* Efectos de hover para filtros */
+.filter-input:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #3B82F6;
+}
+
+/* Animación para las recomendaciones */
+.recommendation-card {
+    animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos para las etiquetas de estado */
+.status-badge {
+    position: relative;
+    overflow: hidden;
+}
+
+.status-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.status-badge:hover::before {
+    left: 100%;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .activity-card {
+        margin-bottom: 1rem;
+    }
+    
+    .filter-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .activity-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .activity-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .activity-actions > * {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Mejoras de accesibilidad */
+.focus-visible:focus {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+}
+
+/* Estilos para el modo oscuro (si se implementa) */
+@media (prefers-color-scheme: dark) {
+    .activity-card {
+        background-color: #1F2937;
+        border-color: #374151;
+    }
+    
+    .activity-card:hover {
+        background-color: #111827;
+    }
+}
+
+/* Animaciones de entrada escalonadas */
+.stagger-animation {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.stagger-animation:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation:nth-child(5) { animation-delay: 0.5s; }
+.stagger-animation:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efectos de micro-interacciones */
+.micro-interaction {
+    transition: all 0.15s ease-in-out;
+}
+
+.micro-interaction:active {
+    transform: scale(0.98);
+}
+
+/* Estilos para tooltips personalizados */
+.tooltip {
+    position: relative;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1F2937;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease-in-out;
+    z-index: 1000;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
+}

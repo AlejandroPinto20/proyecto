@@ -1,0 +1,398 @@
+<x-app-layout>
+    <div class="min-h-screen bg-gradient-to-br from-blue-400 via-purple-400 to-orange-400 py-8 relative overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-white rounded-full mix-blend-overlay filter blur-xl opacity-10 animate-blob"></div>
+            <div class="absolute top-40 right-10 w-72 h-72 bg-white rounded-full mix-blend-overlay filter blur-xl opacity-10 animate-blob animation-delay-2000"></div>
+            <div class="absolute -bottom-8 left-20 w-72 h-72 bg-white rounded-full mix-blend-overlay filter blur-xl opacity-10 animate-blob animation-delay-4000"></div>
+        </div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Header -->
+            <div class="mb-8 text-center">
+                <div class="inline-block p-3 bg-gradient-to-r from-orange-500 to-pink-600 rounded-2xl shadow-lg mb-4 animate-bounce-slow">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                </div>
+                <h1 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 mb-3">Editar Actividad</h1>
+                <p class="text-gray-600 text-lg">✨ Modifica los detalles de la actividad y sus skills asociados</p>
+            </div>
+            <form action="{{ route('activities.update', $activity) }}" method="POST" class="space-y-8">
+                @csrf
+                @method('PUT')
+
+                <!-- Información Básica -->
+                <div class="bg-white rounded-2xl shadow-xl border-2 border-blue-100 p-6 hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Información Básica
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Título de la Actividad</label>
+                            <input type="text" name="name" id="name" value="{{ old('name', $activity->name) }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 @error('name') border-red-500 @enderror" required>
+                            @error('name')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                            @error('title')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
+                            <select name="category" id="category" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('category') border-red-500 @enderror" required>
+                                <option value="">Selecciona una categoría</option>
+                                <option value="voluntariado" {{ old('category', $activity->category) == 'voluntariado' ? 'selected' : '' }}>🤝 Voluntariado</option>
+                                <option value="capacitacion" {{ old('category', $activity->category) == 'capacitacion' ? 'selected' : '' }}>📚 Capacitación</option>
+                                <option value="evento" {{ old('category', $activity->category) == 'evento' ? 'selected' : '' }}>🎉 Evento</option>
+                                <option value="taller" {{ old('category', $activity->category) == 'taller' ? 'selected' : '' }}>🔧 Taller</option>
+                                <option value="proyecto" {{ old('category', $activity->category) == 'proyecto' ? 'selected' : '' }}>🚀 Proyecto</option>
+                            </select>
+                            @error('category')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
+                        <textarea name="description" id="description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('description') border-red-500 @enderror">{{ old('description', $activity->description) }}</textarea>
+                        @error('description')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Fechas y Ubicación -->
+                <div class="bg-white rounded-2xl shadow-xl border-2 border-green-100 p-6 hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10a2 2 0 002 2h4a2 2 0 002-2V11M9 11h6"></path>
+                        </svg>
+                        Programación y Ubicación
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">Fecha y Hora de Inicio</label>
+                            <input type="datetime-local" name="start_date" id="start_date" value="{{ old('start_date', $activity->start_date ? $activity->start_date->format('Y-m-d\TH:i') : '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('start_date') border-red-500 @enderror" onchange="validateDates()">
+                            <p class="text-sm text-gray-500 mt-1" id="start-date-info"></p>
+                            @error('start_date')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">Fecha y Hora de Fin</label>
+                            <input type="datetime-local" name="end_date" id="end_date" value="{{ old('end_date', $activity->end_date ? $activity->end_date->format('Y-m-d\TH:i') : '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('end_date') border-red-500 @enderror" onchange="validateDates()">
+                            <p class="text-sm text-gray-500 mt-1" id="end-date-info"></p>
+                            @error('end_date')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-4 bg-blue-50 rounded-xl" id="duration-info" style="display: none;">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-blue-800 font-medium" id="duration-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div>
+                            <label for="location" class="block text-sm font-medium text-gray-700 mb-2">Ubicación</label>
+                            <input type="text" name="location" id="location" value="{{ old('location', $activity->location) }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('location') border-red-500 @enderror" placeholder="Buscar ubicación..." onchange="searchLocation()">
+                            <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $activity->latitude) }}">
+                            <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $activity->longitude) }}">
+                            @error('location')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="max_participants" class="block text-sm font-medium text-gray-700 mb-2">Máximo de Participantes</label>
+                            <div class="relative">
+                                <input type="number" name="max_participants" id="max_participants" value="{{ old('max_participants', $activity->max_participants) }}" min="1" max="1000" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('max_participants') border-red-500 @enderror" onchange="updateParticipantInfo()">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1" id="participant-info">Deja vacío para sin límite</p>
+                            @error('max_participants')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Mapa Interactivo -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Ubicación en el Mapa</label>
+                        <div id="map" class="w-full h-64 rounded-xl border border-gray-300"></div>
+                        <p class="text-sm text-gray-500 mt-2">Haz clic en el mapa para actualizar la ubicación</p>
+                    </div>
+                </div>
+
+                <!-- Skills Desarrollados -->
+                <div class="bg-white rounded-2xl shadow-xl border-2 border-purple-100 p-6 hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Skills que se Desarrollan
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @foreach($skills as $skill)
+                            <label class="flex items-center p-3 border-2 border-gray-200 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:border-purple-300 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-md">
+                                <input type="checkbox" name="skills[]" value="{{ $skill->id }}" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-3" {{ in_array($skill->id, old('skills', $activity->skills->pluck('id')->toArray())) ? 'checked' : '' }}>
+                                <div class="flex-1">
+                                    <div class="flex items-center">
+                                        <span class="text-lg mr-2">{{ $skill->getEmoji() }}</span>
+                                        <span class="font-medium text-gray-900">{{ $skill->name }}</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">{{ $skill->category }}</p>
+                                </div>
+                            </label>
+                        @endforeach
+                    </div>
+                    @error('skills')
+                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Configuración Avanzada -->
+                <div class="bg-white rounded-2xl shadow-xl border-2 border-orange-100 p-6 hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        </svg>
+                        Configuración
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="registration_type" class="block text-sm font-medium text-gray-700 mb-2">Tipo de Registro</label>
+                            <select name="registration_type" id="registration_type" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="open" {{ old('registration_type', $activity->registration_type ?? 'open') == 'open' ? 'selected' : '' }}>Registro Abierto</option>
+                                <option value="approval_required" {{ old('registration_type', $activity->registration_type ?? 'open') == 'approval_required' ? 'selected' : '' }}>Requiere Aprobación</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Estado</label>
+                            <select name="status" id="status" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="abierta" {{ old('status', $activity->status) == 'abierta' ? 'selected' : '' }}>🟢 Abierta</option>
+                                <option value="proxima" {{ old('status', $activity->status) == 'proxima' ? 'selected' : '' }}>🟡 Próxima</option>
+                                <option value="en_progreso" {{ old('status', $activity->status) == 'en_progreso' ? 'selected' : '' }}>🔵 En Progreso</option>
+                                <option value="completada" {{ old('status', $activity->status) == 'completada' ? 'selected' : '' }}>✅ Completada</option>
+                                <option value="cancelada" {{ old('status', $activity->status) == 'cancelada' ? 'selected' : '' }}>🔴 Cancelada</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Participantes Actuales -->
+                @if($activity->users->count() > 0)
+                <div class="bg-white rounded-2xl shadow-xl border-2 border-blue-100 p-6 hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        Participantes Actuales ({{ $activity->users->count() }})
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($activity->users as $participant)
+                        <div class="flex items-center p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                            <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                                <span class="text-lg">{{ strtoupper(substr($participant->name, 0, 1)) }}</span>
+                            </div>
+                            <div class="flex-1 min-w-0 mx-3">
+                                <p class="font-semibold text-gray-900 truncate">{{ $participant->name }}</p>
+                                <p class="text-xs text-gray-600 truncate">{{ $participant->email }}</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <span class="inline-block px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap {{ $participant->pivot->status == 'joined' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                    {{ ucfirst($participant->pivot->status) }}
+                                </span>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                <!-- Botones de Acción -->
+                <div class="flex items-center justify-between pt-6">
+                    <a href="{{ route('activities.index') }}" class="px-6 py-3 text-gray-600 hover:text-gray-800 font-medium transition-colors duration-200">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="relative bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 text-white px-8 py-3 rounded-2xl font-bold hover:from-orange-700 hover:via-pink-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-110 shadow-xl hover:shadow-2xl overflow-hidden group">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Actualizar Actividad
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        @keyframes blob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -50px) scale(1.1); }
+            50% { transform: translate(-20px, 20px) scale(0.9); }
+            75% { transform: translate(50px, 50px) scale(1.05); }
+        }
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 3s ease-in-out infinite;
+        }
+    </style>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        let map;
+        let marker;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const defaultLat = {{ $activity->latitude ?? -16.5000 }};
+            const defaultLng = {{ $activity->longitude ?? -68.1500 }};
+            
+            map = L.map('map').setView([defaultLat, defaultLng], 13);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            @if($activity->latitude && $activity->longitude)
+            marker = L.marker([{{ $activity->latitude }}, {{ $activity->longitude }}]).addTo(map);
+            @endif
+            
+            map.on('click', function(e) {
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+                
+                marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+                document.getElementById('latitude').value = e.latlng.lat;
+                document.getElementById('longitude').value = e.latlng.lng;
+                
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.display_name) {
+                            document.getElementById('location').value = data.display_name;
+                        }
+                    });
+            });
+            
+            validateDates();
+            updateParticipantInfo();
+        });
+        
+        function searchLocation() {
+            const location = document.getElementById('location').value;
+            if (!location) return;
+            
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lng = parseFloat(data[0].lon);
+                        
+                        map.setView([lat, lng], 15);
+                        
+                        if (marker) {
+                            map.removeLayer(marker);
+                        }
+                        
+                        marker = L.marker([lat, lng]).addTo(map);
+                        document.getElementById('latitude').value = lat;
+                        document.getElementById('longitude').value = lng;
+                    }
+                });
+        }
+        
+        function validateDates() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+            const durationInfo = document.getElementById('duration-info');
+            const durationText = document.getElementById('duration-text');
+            
+            if (startDate && endDate) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                
+                if (end > start) {
+                    const diffMs = end - start;
+                    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                    const diffDays = Math.floor(diffHours / 24);
+                    const remainingHours = diffHours % 24;
+                    
+                    let durationStr = '';
+                    if (diffDays > 0) {
+                        durationStr += `${diffDays} día${diffDays > 1 ? 's' : ''}`;
+                        if (remainingHours > 0) {
+                            durationStr += ` y ${remainingHours} hora${remainingHours > 1 ? 's' : ''}`;
+                        }
+                    } else {
+                        durationStr = `${diffHours} hora${diffHours > 1 ? 's' : ''}`;
+                    }
+                    
+                    durationText.textContent = `Duración: ${durationStr}`;
+                    durationInfo.style.display = 'block';
+                } else {
+                    durationInfo.style.display = 'none';
+                }
+            }
+        }
+        
+        function updateParticipantInfo() {
+            const maxParticipants = document.getElementById('max_participants').value;
+            const info = document.getElementById('participant-info');
+            
+            if (maxParticipants) {
+                const num = parseInt(maxParticipants);
+                if (num > 0) {
+                    info.textContent = `Máximo ${num} participante${num > 1 ? 's' : ''}`;
+                    info.className = 'text-sm text-blue-600 mt-1';
+                } else {
+                    info.textContent = 'Número inválido';
+                    info.className = 'text-sm text-red-500 mt-1';
+                }
+            } else {
+                info.textContent = 'Sin límite de participantes';
+                info.className = 'text-sm text-gray-500 mt-1';
+            }
+        }
+    </script>
+</x-app-layout>

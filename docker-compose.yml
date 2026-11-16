@@ -1,0 +1,60 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: voluntariado_app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    volumes:
+      - .:/var/www
+      - /var/www/node_modules
+      - /var/www/vendor
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - voluntariado_net
+
+  db:
+    image: mysql:8.0
+    container_name: voluntariado_db
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: voluntariado_db
+      MYSQL_ROOT_PASSWORD: secretpassword
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - voluntariado_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecretpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: voluntariado_pma
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: secretpassword
+    depends_on:
+      - db
+    networks:
+      - voluntariado_net
+
+volumes:
+  db_data:
+
+networks:
+  voluntariado_net:
+    driver: bridge
